@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>Author Detail</h1>
+
+<p>Name: {{ object.name }}</p>
+
+<h2>Book List</h2>
+
+<table>
+	<thead>
+		<tr>
+			<th>Title</th>
+			<th>Publisher</th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for b in object.books.all %}
+			<tr>
+				<td>{{ b.name }}</td>
+				<td>{{ b.publisher.name }}</td>
+			</tr>
+		{% endfor %}
+	</tbody>
+</table>
+
+<p><a href="{% url 'author_report' object.id %}">Author Report</a></p>
+
+{% endblock content %}
