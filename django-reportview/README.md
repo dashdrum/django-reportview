@@ -4,11 +4,17 @@ Based on PDFGenView by Inka Labs
 
 <http://inka-labs.com/blog/2013/04/12/generating-pdfs-was-never-so-easy/>
          
-Django ReportView provides drop-in replacements for generic class-based views that send the output to a PDF file.  The code used to generate a web page can be used to create a printable copy.
+Django ReportView provides drop-in replacements for generic class-based views that send the output to a PDF file.  The same code used to generate a web page can be repurposed to create a printable copy.
  
-The trml2pdf libary is used to convert a ReportLab template (RML) to PDF output.  (See `requirements.txt` for the list of required libraries.)
+The trml2pdf libary is used to convert a ReportLab template (RML) to PDF output.  
  
 Each view adds a class variable called `output-filename`, which holds the name of the file to be created.
+
+## Dependencies
+
+- Django 1.3+ <https://www.djangoproject.com/>
+- reportlab <http://www.reportlab.com/>
+- trml2pdf <https://github.com/roadhead/trml2pdf>
 
 ## ReportMixin
 
@@ -80,5 +86,10 @@ RML is a very rich templating language included in the ReportLab package.  I hav
 Initial release
 
 
+## License
+
+Django Reportview is distributed under the terms of the University of Illinois/NCSA Open Source License license.
+
+<http://otm.illinois.edu/uiuc_openSource>
        
      

@@ -1,5 +1,3 @@
-"""
-
 Django Reportview is distributed under the terms of the University 
 of Illinois/NCSA Open Source License
 
@@ -34,25 +32,3 @@ PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE CONTRIBUTORS OR
 COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER 
 IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION 
 WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS WITH THE SOFTWARE.
-
-"""
-
-from django.test import TestCase 
-from django.core.exceptions import ImproperlyConfigured
-
-from views import ReportMixin
-
-class TestReportMixin(TestCase):
-    def test_filename(self):
-        ## Instantiate object with no filename
-        test_object = ReportMixin()
-        
-        self.assertRaises(ImproperlyConfigured,test_object.get_output_filename)
-        
-        ## Instantiate object with filename
-        test_object = ReportMixin()
-        test_object.output_filename='output.pdf'
-        
-        self.assertEqual(test_object.get_output_filename(),'output.pdf')
-        
-        
