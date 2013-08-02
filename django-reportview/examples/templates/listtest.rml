@@ -1,7 +1,0 @@
-<!DOCTYPE document SYSTEM "rml_1_0.dtd">
-<document>
-<stylesheet></stylesheet>
-<pageDrawing>
-<drawCentredString x="4.1in" y="5.8in">{% for b in object_list %}{{ b.isbn }}{% endfor %}</drawCentredString>
-</pageDrawing>
-</document>
