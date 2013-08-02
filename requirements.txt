@@ -1,0 +1,7 @@
+### Required python libraries for django-reportview
+#
+#  
+
+Django
+reportlab
+git+git://github.com/roadhead/trml2pdf.git

@@ -1,0 +1,34 @@
+<!DOCTYPE document SYSTEM "rml_1_0.dtd">
+<document>
+<template>
+		<pageTemplate id="main">
+		<frame id="first" x1="72" y1="72" width="451" height="698"/>
+		</pageTemplate>
+</template>
+  <stylesheet>
+    <blockTableStyle id="main">
+      <blockSpan start="0,1" stop="1,1"/>
+    </blockTableStyle>
+  </stylesheet>
+<story>
+<h1>Author Report</h1>
+
+<para>Name: {{ object.name }}</para>
+
+<h2>Book List</h2>
+
+
+    <blockTable style="main">
+		<tr>
+			<td>Title</td>
+			<td>Publisher</td>
+		</tr>
+		{% for b in object.books.all %}
+			<tr>
+				<td>{{ b.name }}</td>
+				<td>{{ b.publisher.name }}</td>
+			</tr>
+		{% endfor %}
+    </blockTable>
+</story>    
+</document>

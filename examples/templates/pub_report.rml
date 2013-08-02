@@ -1,0 +1,29 @@
+<!DOCTYPE document SYSTEM "rml_1_0.dtd">
+<document>
+<template>
+		<pageTemplate id="main">
+		<frame id="first" x1="72" y1="72" width="451" height="698"/>
+		</pageTemplate>
+</template>
+  <stylesheet>
+    <blockTableStyle id="main">
+      <blockSpan start="0,1" stop="1,1"/>
+    </blockTableStyle>
+  </stylesheet>
+<story>
+<h1>Publisher Report</h1>
+
+    <blockTable style="main">
+		<tr>
+			<td>Name</td>
+			<td>Number of Awards</td>
+		</tr>
+		{% for p in object_list %}
+			<tr>
+				<td>{{ p.name }}</td>
+				<td>{{ p.num_awards }}</td>
+			</tr>
+		{% endfor %}
+    </blockTable>
+</story>    
+</document>
