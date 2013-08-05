@@ -40,7 +40,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS WITH THE SOFTWARE.
 from django.test import TestCase 
 from django.core.exceptions import ImproperlyConfigured
 
-from views import ReportMixin
+from reportview.views import ReportMixin
 
 class TestReportMixin(TestCase):
     def test_filename(self):
