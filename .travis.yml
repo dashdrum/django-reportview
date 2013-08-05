@@ -15,8 +15,8 @@ install:
 script:
   - python manage.py test
   - coverage run --source=reportview manage.py test
+after_success: coveralls
 matrix:
     exclude:
         - python: 3.3
           env: DJANGO_VERSION=1.4.5
-after_success: coveralls
