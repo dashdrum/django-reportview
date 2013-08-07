@@ -55,6 +55,7 @@ from django.views.generic.list import MultipleObjectMixin
 from django.core.exceptions import ImproperlyConfigured
 from django.http import HttpResponse, Http404
 from django.template.loader import render_to_string
+from django.utils.translation import ugettext as _
 
 import trml2pdf
 
@@ -86,35 +87,46 @@ class ReportMixin(object):
             rml = rml.encode('UTF-8')
         response.write(trml2pdf.parseString(rml))
         return response
+    
+### Django v1.4 and 1.5 handle context differently
+try:  
+    ### Use the mixin provided in v1.5
+    from django.views.generic.base import ContextMixin
+except ImportError: 
+    ### or create a class using the v1.4 functionality
+    class ContextMixin(object):
+        def get_context_data(self, **kwargs):
+            return {
+                    'params': kwargs
+                   }
 
-class TemplateReportView(ReportMixin, TemplateResponseMixin, View):
+class TemplateReportView(ReportMixin, TemplateResponseMixin, ContextMixin, View):
     ''' A simple report - use get_context_data to provide content '''
-
-    def get_context_data(self,**kwargs):
-        ### start with empty context
-        context = {}
-        return context
+    pass
 
 class DetailReportView(ReportMixin, TemplateResponseMixin, SingleObjectMixin, View):
     ''' A report based on a single object '''
-
+    
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        return super(DetailReportView,self).get(request, *args, **kwargs)
+    
     def get_context_data(self, **kwargs):
         ### Add self.object to the context
-        self.object = self.get_object()
-        context = super(DetailReportView,self).get_context_data( **kwargs)
-        context['object'] = self.object
-        return context
+        return super(DetailReportView,self).get_context_data(object = self.get_object(), **kwargs)
     
 class ListReportView(ReportMixin, TemplateResponseMixin, MultipleObjectMixin, View):
     ''' A report based on a list of objects '''
     
-    def get_context_data(self, **kwargs):
-        ### allow_empty test
+    def get(self, request, *args, **kwargs):
         self.object_list = self.get_queryset()
         allow_empty = self.get_allow_empty()
         if not allow_empty and len(self.object_list) == 0:
             raise Http404(_(u"Empty list and '%(class_name)s.allow_empty' is False.")
                           % {'class_name': self.__class__.__name__})
-        ### add self.object_list to the context
-        return super(ListReportView,self).get_context_data(object_list=self.object_list, **kwargs)
+        return super(ListReportView,self).get(request, *args, **kwargs)
+    
+    def get_context_data(self, **kwargs):
+        ### add object_list to the context
+        return super(ListReportView,self).get_context_data(object_list=self.get_queryset(), **kwargs)
     

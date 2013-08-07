@@ -39,8 +39,13 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS WITH THE SOFTWARE.
 
 from django.test import TestCase 
 from django.core.exceptions import ImproperlyConfigured
+from django.views.generic import TemplateView
+from django.core.urlresolvers import reverse
 
-from reportview.views import ReportMixin
+from reportview.views import ReportMixin, TemplateReportView
+
+from factories import AuthorFactory
+from models import Author
 
 class TestReportMixin(TestCase):
     def test_filename(self):
@@ -54,5 +59,81 @@ class TestReportMixin(TestCase):
         test_object.output_filename='output.pdf'
         
         self.assertEqual(test_object.get_output_filename(),'output.pdf')
+    
+        
+class TestTemplateReportView(TestCase):
+    def test_context(self):
+        ##  Instantiate object with no context
+        test_view = TemplateReportView(output_filename='output.pdf',template_name='template.rml')
+        
+        ##  Compare to results using Django's TemplateView 
+        test_view2 = TemplateView(output_filename='output.pdf',template_name='template.rml')
+        
+        ## Test with no context
+        
+        ## get context from each view
+        context1 = test_view.get_context_data()
+        context2 = test_view2.get_context_data()
+        
+        ## remove 'view' key from dictionary, if present        
+        try:
+            del context1['view']
+            del context2['view']
+        except KeyError:
+            pass  ## v1.4 doesn't add this key
+        
+        self.assertEqual(context1, context2)
+        
+        ## Test with additional context items added
+        
+        ## get context from each view
+        context1 = test_view.get_context_data(cv = 'test', cv2 = 'test2')
+        context2 = test_view2.get_context_data(cv = 'test', cv2 = 'test2')
+        
+        ## remove 'view' key from dictionary, if present        
+        try:
+            del context1['view']
+            del context2['view']
+        except KeyError:
+            pass  ## Django v1.4 doesn't add this key
+        
+        self.assertEqual(context1, context2)
+        
+    def test_response(self):
+        response = self.client.get(reverse('simple_test'))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'simpletest.rml')
+        self.assertEqual(response['Content-Type'],'application/pdf')
+        self.assertEqual(response['Content-Disposition'], 'attachment; filename="simpletest.pdf"')
+        
+class TestDetailReportView(TestCase):
+    def test_successful(self):
+        aut = AuthorFactory.create()
+        response = self.client.get(reverse('detail_test', kwargs = {'pk': aut.pk}))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'detailtest.rml')
+        self.assertEqual(response.context['object'], aut)
+        
+class TestListReportView(TestCase):
+    def test_empty_list(self):
+        response = self.client.get(reverse('list_test'))
+        self.assertEqual(response.status_code, 200)
+        
+    def test_no_empty_list(self):
+        response = self.client.get(reverse('list_test_no_empty'))
+        self.assertEqual(response.status_code, 404)
+        
+    def test_list(self):
+        aut1 = AuthorFactory.create()
+        aut2 = AuthorFactory.create()
+        aut3 = AuthorFactory.create()
+        aut4 = AuthorFactory.create()
+        response = self.client.get(reverse('list_test'))
+        self.assertTemplateUsed(response, 'listtest.rml')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual([aut for aut in response.context['object_list']],[aut for aut in Author.objects.all()])
+        
+        
+        
         
         

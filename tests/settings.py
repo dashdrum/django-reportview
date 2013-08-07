@@ -1,11 +1,10 @@
-# Django settings for django-reportview examples
+# Django settings for django-reportview tests
 # Nothing special here - just defaults
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
-ADMINS = (
-)
+ADMINS = ()
 
 MANAGERS = ADMINS
 
@@ -31,7 +30,7 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 )
-SECRET_KEY = '(o=pn@j7yg2gz7x=6m!upjzyg!i#(&7*&t$1q-3jyatnm15z9h'
+SECRET_KEY = 'not so secret'
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.Loader',
     'django.template.loaders.app_directories.Loader',
@@ -43,8 +42,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
 )
-ROOT_URLCONF = 'examples.urls'
-WSGI_APPLICATION = 'examples.wsgi.application'
+ROOT_URLCONF = 'tests.urls'
 TEMPLATE_DIRS = (
 )
 
@@ -59,28 +57,5 @@ INSTALLED_APPS = (
     
     'tests',
 )
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'filters': {
-        'require_debug_false': {
-            '()': 'django.utils.log.RequireDebugFalse'
-        }
-    },
-    'handlers': {
-        'mail_admins': {
-            'level': 'ERROR',
-            'filters': ['require_debug_false'],
-            'class': 'django.utils.log.AdminEmailHandler'
-        }
-    },
-    'loggers': {
-        'django.request': {
-            'handlers': ['mail_admins'],
-            'level': 'ERROR',
-            'propagate': True,
-        },
-    }
-}
 
 TEST_RUNNER = 'hotrunner.HotRunner'
