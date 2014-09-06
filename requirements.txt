@@ -3,5 +3,5 @@
 #  
 
 Django
-reportlab
+reportlab<3.0
 git+git://github.com/roadhead/trml2pdf.git
